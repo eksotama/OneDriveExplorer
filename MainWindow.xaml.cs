@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Windows;
 using OneDriveExplorer.Properties;
@@ -19,6 +20,16 @@ namespace OneDriveExplorer
             InitializeComponent();
             _fileSystem.StatusChanged += _fileSystem_StatusChanged;
             _model.StateChanged += _model_StateChanged;
+
+            TaskbarIcon.Icon = new Icon("OneDrive.ico");
+        }
+
+        protected override void OnStateChanged(EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized)
+                Hide();
+
+            base.OnStateChanged(e);
         }
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -29,6 +40,9 @@ namespace OneDriveExplorer
                         ? ViewModel.State.Mounted
                         : ViewModel.State.Authenticated)
                     : ViewModel.State.Unauthenticated;
+            WindowState = _model.CurrentState == ViewModel.State.Unauthenticated
+                ? WindowState.Normal
+                : WindowState.Minimized;
         }
 
         private void Mount(object sender, RoutedEventArgs routedEventArgs)
@@ -56,6 +70,12 @@ namespace OneDriveExplorer
                     };
                 window.ShowDialog();
             }));
+        }
+
+        private void TaskBarIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e)
+        {
+            Show();
+            WindowState = WindowState.Normal;
         }
 
         private void Unmount(object sender, RoutedEventArgs routedEventArgs)
@@ -122,6 +142,11 @@ namespace OneDriveExplorer
                         break;
                 }
             }));
+        }
+
+        private void TaskbarIcon_MenuItem01_OnClick(object sender, RoutedEventArgs e)
+        {
+            TaskBarIcon_TrayMouseDoubleClick(sender, e);
         }
     }
 }
