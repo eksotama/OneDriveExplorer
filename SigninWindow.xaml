@@ -1,0 +1,8 @@
+﻿<Window x:Class="OneDriveExplorer.SigninWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Sign In" Height="500" Width="500">
+    <Grid>
+        <WebBrowser Height="449" HorizontalAlignment="Left" x:Name="WebBrowser" VerticalAlignment="Top" Width="472" LoadCompleted="WebBrowser_LoadCompleted" Margin="10,10,0,0" />
+    </Grid>
+</Window>
